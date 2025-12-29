@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>직장인 점심 룰렛 🎡</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Kakao Maps SDK -->
+    <!-- [IMPORTANT] Replace YOUR_APP_KEY with your actual Kakao Javascript API Key -->
+    <script type="text/javascript"
+        src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=2cc98df913bf68f6f6b3c29fa6018b56&libraries=services"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="main-header">
+            <div class="logo-area">
+                <span class="emoji">🎡</span>
+                <h1>직장인<br><span class="highlight">점심 룰렛</span></h1>
+            </div>
+            <p class="subtitle">오늘 점심, 고민하지 말고 돌리세요! 🥄</p>
+        </header>
+
+        <main>
+            <!-- Search Section -->
+            <section id="search-section" class="card search-card">
+                <div class="search-input-area">
+                    <div class="input-wrapper">
+                        <input type="text" id="params-input" placeholder="회사 이름 또는 건물명, 주소를 입력하세요" autofocus>
+                        <button id="search-btn" class="action-btn">검색</button>
+                    </div>
+                </div>
+
+                <div id="search-results" class="results-area hidden"></div>
+            </section>
+
+            <!-- Mode/Distance Selection (Previously Selection Display) -->
+            <section id="selection-section" class="card selection-card hidden">
+                <div class="selected-info">
+                    <span class="label">설정된 위치</span>
+                    <h3 id="selected-name">판교 카카오 아지트</h3>
+                </div>
+
+                <div class="distance-selector">
+                    <p class="selector-label">거리 선택 (도보 기준)</p>
+                    <div class="radio-group">
+                        <label class="radio-btn">
+                            <input type="radio" name="distance" value="400" checked>
+                            <span>5분 (400m)</span>
+                        </label>
+                        <label class="radio-btn">
+                            <input type="radio" name="distance" value="800">
+                            <span>10분 (800m)</span>
+                        </label>
+                        <label class="radio-btn">
+                            <input type="radio" name="distance" value="1200">
+                            <span>15분 (1.2km)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button id="find-restaurants-btn" class="primary-btn glow-effect">
+                    🍽️ 주변 맛집 찾기
+                </button>
+            </section>
+
+            <!-- Roulette Section -->
+            <section id="roulette-section" class="card roulette-card hidden">
+                <div class="roulette-header">
+                    <h3>오늘의 후보 <span id="candidate-count">20</span>곳</h3>
+                    <p>마음에 안 드시나요?</p>
+                    <button id="refresh-candidates-btn" class="text-btn">🔄 후보 새로 고침</button>
+                </div>
+
+                <div class="roulette-container">
+                    <canvas id="roulette-canvas" width="350" height="350"></canvas>
+                    <div class="roulette-pointer">▼</div>
+                </div>
+
+                <div class="roulette-actions">
+                    <button id="roulette-start-btn" class="primary-btn spin-btn">
+                        🎰 룰렛 돌리기!
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <p>© 2025 Office Worker's Emergency Exit</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
