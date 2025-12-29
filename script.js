@@ -1,5 +1,3 @@
-console.log("--- 스크립트 로드됨 (버전: 2.1) ---");
-
 // State
 const state = {
     allRestaurants: [],
@@ -102,12 +100,7 @@ function handleSearch(isSilent = false) {
 
     // Check if Kakao API and Services are fully loaded and valid
     if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services) {
-        console.warn("Kakao API Readiness Check failed:");
-        console.warn("- window.kakao:", !!window.kakao);
-        console.warn("- window.kakao.maps:", window.kakao ? !!window.kakao.maps : "N/A");
-        console.warn("- window.kakao.maps.services:", (window.kakao && window.kakao.maps) ? !!window.kakao.maps.services : "N/A");
-        console.warn("Check your API Key and registered domains in Kakao Developers console.");
-
+        console.warn("Kakao API not ready or invalid key, using mocks");
         renderMockLocations(query);
         return;
     }
