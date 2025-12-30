@@ -100,8 +100,7 @@ function handleSearch(isSilent = false) {
 
     // Check if Kakao API and Services are fully loaded and valid
     if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services) {
-        console.warn("Kakao API not ready or invalid key, using mocks");
-        renderMockLocations(query);
+        alert("지도 서비스를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.");
         return;
     }
 
@@ -152,7 +151,7 @@ function handleSearch(isSilent = false) {
 
     } catch (e) {
         console.error("Kakao API Error:", e);
-        renderMockLocations(query);
+        elements.resultsArea.innerHTML = '<div class="result-item"><p>검색 중 오류가 발생했습니다.</p></div>';
     }
 }
 
@@ -182,18 +181,7 @@ function renderLocationResults(data) {
     });
 }
 
-function renderMockLocations(query) {
-    elements.resultsArea.classList.remove('hidden');
-    elements.resultsArea.innerHTML = '<div class="result-item"><p>가상 데이터 검색 중...</p></div>';
 
-    setTimeout(() => {
-        const mocks = [
-            { place_name: query + " 본사", address_name: "서울 강남구 테헤란로 123", x: 127.1, y: 37.4 },
-            { place_name: query + " 센터", address_name: "성남시 분당구 판교역로 456", x: 127.1, y: 37.4 },
-        ];
-        renderLocationResults(mocks);
-    }, 300);
-}
 
 function selectLocation(place) {
     state.selectedLocation = place;
@@ -217,7 +205,7 @@ function fetchRestaurants() {
     const radius = state.selectedRadius;
 
     if (!window.kakao || !window.kakao.maps) {
-        generateMockRestaurants();
+        alert("지도 기능을 사용할 수 없습니다.");
         return;
     }
 
@@ -266,33 +254,19 @@ function fetchRestaurants() {
             }
         });
 
-        if (uniquePlaces.length < 5) {
-            alert("주변에 식당이 별로 없네요! 가상의 맛집을 추가합니다.");
-            const mocks = getMockRestaurants(MAX_CANDIDATES - uniquePlaces.length);
-            state.allRestaurants = [...uniquePlaces, ...mocks];
-        } else {
-            state.allRestaurants = uniquePlaces;
+        if (uniquePlaces.length === 0) {
+            alert("주변에 검색된 식당이 없습니다. 다른 위치를 선택하거나 거리 설정을 변경해보세요!");
+            return;
         }
+
+        state.allRestaurants = uniquePlaces;
 
         console.log(`[맛집 데이터] 총 ${uniquePlaces.length}개 확보 완료`);
         prepareRoulette();
     });
 }
 
-function generateMockRestaurants() {
-    state.allRestaurants = getMockRestaurants(30);
-    prepareRoulette();
-}
 
-function getMockRestaurants(count) {
-    const names = ["순대국", "김치찌개", "파스타", "소고기", "초밥", "햄버거", "떡볶이", "짬뽕", "백반", "샐러드", "타코", "쌀국수", "카레", "삼겹살", "닭갈비"];
-    const results = [];
-    for (let i = 0; i < count; i++) {
-        const name = names[i % names.length] + " 맛집 " + (i + 1) + "호점";
-        results.push({ place_name: name, category_name: '가상 맛집' });
-    }
-    return results;
-}
 
 // 3. Prepare Roulette
 function prepareRoulette() {
