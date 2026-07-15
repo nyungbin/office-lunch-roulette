@@ -103,6 +103,7 @@ h1 {
 
 input[type="text"] {
     flex: 1;
+    min-width: 0;
     background: var(--bg-color);
     border: 1px solid var(--border);
     color: white;
@@ -114,6 +115,8 @@ input[type="text"] {
     background: #f8fafc;
     /* Very light gray input bg */
     color: var(--text-main);
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 input[type="text"]:focus {
@@ -130,6 +133,8 @@ input[type="text"]:focus {
     border-radius: 1rem;
     font-weight: 700;
     cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: transform 0.1s, box-shadow 0.3s;
 }
 
@@ -310,7 +315,9 @@ input[type="text"]:focus {
 .roulette-container {
     position: relative;
     width: 350px;
-    height: 350px;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
     margin: 0 auto 2rem;
 }
 
@@ -427,6 +434,31 @@ input[type="text"]:focus {
 .fade-out {
     opacity: 0.5;
     transition: opacity 0.3s;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .app-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .card {
+        padding: 1.2rem;
+    }
+
+    .input-wrapper {
+        gap: 0.4rem;
+    }
+
+    input[type="text"] {
+        padding: 0.9rem 0.8rem;
+        font-size: 0.95rem;
+    }
+
+    .action-btn {
+        padding: 0 1rem;
+        font-size: 0.95rem;
+    }
 }
 
 /* Scrollbar */
