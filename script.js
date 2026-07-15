@@ -1,3 +1,29 @@
+// Language / Messages
+const LANG = document.documentElement.lang === 'en' ? 'en' : 'ko';
+const MESSAGES = {
+    ko: {
+        noQuery: "검색어를 입력해주세요!",
+        mapUnavailable: "지도 서비스를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.",
+        searching: "검색 중...",
+        searchError: "검색 중 오류가 발생했습니다.",
+        noResults: "검색 결과가 없습니다.",
+        mapFeatureUnavailable: "지도 기능을 사용할 수 없습니다.",
+        noRestaurants: "주변에 검색된 식당이 없습니다. 다른 위치를 선택하거나 거리 설정을 변경해보세요!",
+        winner: (name) => `🎉 당첨! 오늘의 점심은 [${name}] 입니다! \n맛있게 드세요!`
+    },
+    en: {
+        noQuery: "Please enter a search term!",
+        mapUnavailable: "Couldn't load the map service. Please try again in a moment.",
+        searching: "Searching...",
+        searchError: "An error occurred while searching.",
+        noResults: "No results found.",
+        mapFeatureUnavailable: "Map feature is unavailable.",
+        noRestaurants: "No restaurants found nearby. Try a different location or distance setting!",
+        winner: (name) => `🎉 Winner! Today's lunch is [${name}]! \nEnjoy your meal!`
+    }
+};
+const t = MESSAGES[LANG];
+
 // State
 const state = {
     allRestaurants: [],
@@ -94,13 +120,13 @@ function resetSearch() {
 function handleSearch(isSilent = false) {
     const query = elements.paramsInput.value.trim();
     if (!query) {
-        if (!isSilent) alert("검색어를 입력해주세요!");
+        if (!isSilent) alert(t.noQuery);
         return;
     }
 
     // Check if Kakao API and Services are fully loaded and valid
     if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services) {
-        alert("지도 서비스를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.");
+        alert(t.mapUnavailable);
         return;
     }
 
@@ -109,7 +135,7 @@ function handleSearch(isSilent = false) {
         const geocoder = new kakao.maps.services.Geocoder();
 
         elements.resultsArea.classList.remove('hidden');
-        elements.resultsArea.innerHTML = '<div class="result-item"><p>검색 중...</p></div>';
+        elements.resultsArea.innerHTML = `<div class="result-item"><p>${t.searching}</p></div>`;
 
         // Run both searches: Keyword and Address
         const keywordPromise = new Promise((resolve) => {
@@ -151,7 +177,7 @@ function handleSearch(isSilent = false) {
 
     } catch (e) {
         console.error("Kakao API Error:", e);
-        elements.resultsArea.innerHTML = '<div class="result-item"><p>검색 중 오류가 발생했습니다.</p></div>';
+        elements.resultsArea.innerHTML = `<div class="result-item"><p>${t.searchError}</p></div>`;
     }
 }
 
@@ -160,7 +186,7 @@ function renderLocationResults(data) {
     elements.resultsArea.innerHTML = '';
 
     if (data.length === 0) {
-        elements.resultsArea.innerHTML = '<div class="result-item"><p>검색 결과가 없습니다.</p></div>';
+        elements.resultsArea.innerHTML = `<div class="result-item"><p>${t.noResults}</p></div>`;
         return;
     }
 
@@ -205,7 +231,7 @@ function fetchRestaurants() {
     const radius = state.selectedRadius;
 
     if (!window.kakao || !window.kakao.maps) {
-        alert("지도 기능을 사용할 수 없습니다.");
+        alert(t.mapFeatureUnavailable);
         return;
     }
 
@@ -255,7 +281,7 @@ function fetchRestaurants() {
         });
 
         if (uniquePlaces.length === 0) {
-            alert("주변에 검색된 식당이 없습니다. 다른 위치를 선택하거나 거리 설정을 변경해보세요!");
+            alert(t.noRestaurants);
             return;
         }
 
@@ -435,5 +461,5 @@ function showResult() {
     const index = Math.floor(angleFrom0 / arc);
     const winner = state.candidates[index];
 
-    alert(`🎉 당첨! 오늘의 점심은 [${winner.place_name}] 입니다! \n맛있게 드세요!`);
+    alert(t.winner(winner.place_name));
 }
